@@ -10,7 +10,9 @@ POST    /students                       controllers.StudentController.addStudent
 DELETE  /students/:userId               controllers.StudentController.removeStudent(userId: Int)
 PUT     /students/:userId               controllers.StudentController.updateStudent(userId :Int)
 GET        /stb                         controllers.StudentController.getValueFromCassandraTable()
-GET     /students/ping                  controllers.StudentController.ping
+GET     /student/ping                   controllers.StudentController.ping
+
+POST    /test/insert                    controllers.StudentController.insert
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

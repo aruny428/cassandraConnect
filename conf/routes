@@ -1,0 +1,16 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /students                       controllers.StudentController.students()
+GET     /students/:userId               controllers.StudentController.getStudent(userId : Int)
+POST    /students                       controllers.StudentController.addStudent()
+DELETE  /students/:userId               controllers.StudentController.removeStudent(userId: Int)
+PUT     /students/:userId               controllers.StudentController.updateStudent(userId :Int)
+GET        /stb                         controllers.StudentController.getValueFromCassandraTable()
+GET     /students/ping                  controllers.StudentController.ping
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -5,14 +5,15 @@ import com.datastax.driver.core.Cluster
 import javax.inject._
 import scala.collection.mutable.ListBuffer
 import play.api.mvc._
-import models.Student
+import models.{Student, Test}
 import play.api.libs.json._
-import utils.CassandraClient
+//import utils.CassandraClient
 
 @Singleton
-class StudentController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class StudentController @Inject()(val controllerComponents: ControllerComponents,
+                                  test: Test) extends BaseController {
 
-  private val session = CassandraClient.session
+//  private val session = CassandraClient.session
   implicit val StudentFormat = Json.format[Student]
 
   //Testing my changes
@@ -93,12 +94,30 @@ class StudentController @Inject()(val controllerComponents: ControllerComponents
 
 
     def getValueFromCassandraTable() = Action { request =>
-      session.execute("SELECT * FROM arun.students")
+//      session.execute("SELECT * FROM arun.students")
       Ok("All Set")
     }
 
   def ping = Action {
     println(s"Ping API called")
-    Ok(<response><status>Success</status><message>pong</message></response>).withHeaders()
+    Ok(<response><status>Success</status><message>pong</message></response>).as("text/xml")
+  }
+
+  def insert() = Action(parse.xml) { request =>
+    val body = request.body
+    val name: String = (body \\ "name").headOption.map(_.text.trim).getOrElse("")
+    val salary: Double = (body \\ "salary").headOption.map(_.text.toDouble).getOrElse(10000)
+
+    if (name.isEmpty) {
+      println(s"Required fields are missing")
+      BadRequest(<response><status>Failure</status><message>Required name is missing in request body</message></response>)
+    }else {
+      println(s"Inserting entry for $name")
+      test.insert(name, salary) match {
+        case true => Ok(<response><status>Success</status><message>Created entry</message></response>)
+        case false => println("Failed to insert the value")
+          InternalServerError(<response><status>Failure</status><message>Something went wrong</message></response>)
+      }
+    }
   }
 }

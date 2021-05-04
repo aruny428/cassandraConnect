@@ -8,9 +8,8 @@ object CassandraClient {
   private val reconnectionPolicy = new ConstantReconnectionPolicy(1000L)
 
   private val cluster = Cluster.builder()
-    .addContactPoint("10.0.1.53") // cassandra.iviws.local
+    .addContactPoint("10.0.1.53")
     .withReconnectionPolicy(reconnectionPolicy)
-    //.withPort(9042)
     .build()
 
   val session = cluster.connect()

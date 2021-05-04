@@ -1,8 +1,5 @@
 package models
 
-//import play.api.libs.json.{Format, Json}
-
-
 case class Student(
    id: Int,
    name : String ,
@@ -10,4 +7,11 @@ case class Student(
    subjects: Set[String],
    marks : Map[String,Int]
 )
+
+case class StudentId(id :Int)
+
+
+
+
+
 
